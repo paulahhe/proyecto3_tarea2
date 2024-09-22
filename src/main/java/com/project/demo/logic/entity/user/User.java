@@ -12,8 +12,8 @@ import java.util.Date;
 import java.util.List;
 
 @Table(name = "user")
-@Entity
-public class User implements UserDetails {
+@Entity //mapeado como entidad de base de datos
+public class User implements UserDetails { //
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -39,7 +39,7 @@ public class User implements UserDetails {
         return List.of(authority);
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER) //espere a que la relacion este cargada para setear la relación, lazy es hacerlo ya
     @JoinColumn(name = "role_id", referencedColumnName = "id", nullable = false)
     private Role role;
 

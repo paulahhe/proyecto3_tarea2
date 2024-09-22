@@ -1,5 +1,4 @@
 package com.project.demo.rest.auth;
-
 import com.project.demo.logic.entity.auth.AuthenticationService;
 import com.project.demo.logic.entity.auth.JwtService;
 import com.project.demo.logic.entity.rol.Role;
@@ -18,23 +17,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
-
 @RequestMapping("/auth")
 @RestController
 public class AuthRestController {
-
-
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     private PasswordEncoder passwordEncoder;
-
     @Autowired
     private RoleRepository roleRepository;
-
-
-
     private final AuthenticationService authenticationService;
     private final JwtService jwtService;
 
@@ -66,7 +57,6 @@ public class AuthRestController {
         if (existingUser.isPresent()) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Email already in use");
         }
-
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         Optional<Role> optionalRole = roleRepository.findByName(RoleEnum.USER);
 

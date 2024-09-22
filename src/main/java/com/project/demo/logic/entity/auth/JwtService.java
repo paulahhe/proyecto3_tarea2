@@ -14,11 +14,11 @@ import java.util.function.Function;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-
-@Service
+//Cada request que se haga, pasa por aquí para autenticación
+@Service //Decorador
 public class JwtService {
     @Value("${security.jwt.secret-key}")
-    private String secretKey;
+    private String secretKey; //secret key del application.properties
 
     @Value("${security.jwt.expiration-time}")
     private long jwtExpiration;
@@ -39,7 +39,7 @@ public class JwtService {
     public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
         return buildToken(extraClaims, userDetails, jwtExpiration);
     }
-
+    // mismo nombre, diferentes parametros -> sobrecarga de metodos
     public long getExpirationTime() {
         return jwtExpiration;
     }
