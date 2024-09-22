@@ -22,7 +22,7 @@ public class CategoryController {
     }
 
     @GetMapping("/{id}")
-    public Category getCategoryById(@PathVariable String id) {
+    public Category getCategoryById(@PathVariable Long id) {
         return categoryRepository.findById(id).orElseThrow(
                 ()-> new RuntimeException("No se encontró la categoría con Id" + id)
         );
@@ -36,7 +36,7 @@ public class CategoryController {
 
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('SUPER_ADMIN_ROLE')")
-    public Category updateCategory(@PathVariable String id, @RequestBody Category category) {
+    public Category updateCategory(@PathVariable Long id, @RequestBody Category category) {
         return categoryRepository.findById(id)
                 .map(existingCategory -> {
                     existingCategory.setName(category.getName());
@@ -50,7 +50,7 @@ public class CategoryController {
     }
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyRole('SUPER_ADMIN_ROLE')")
-    public void deleteCategory(@PathVariable String id) {
+    public void deleteCategory(@PathVariable Long id) {
         categoryRepository.deleteById(id);
     }
 

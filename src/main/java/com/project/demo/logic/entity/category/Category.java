@@ -8,18 +8,18 @@ public class Category {
     @Id
     @GeneratedValue (strategy = GenerationType.AUTO)
     @Column (nullable = false)
-    private String id;
+    private Long id;
 
     @Column (unique = true, nullable = false)
     private String name;
 
     private String description;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
