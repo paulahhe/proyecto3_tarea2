@@ -17,15 +17,18 @@ public class ProductController {
     private ProductRepository productRepository;
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('USER','SUPER_ADMIN_ROLE')")
     public List<Product> getAllProductos() {return productRepository.findAll();}
 
     @GetMapping("/{id}")
-    public Product getProductById(@PathVariable String id) {
+    @PreAuthorize("hasAnyRole('USER','SUPER_ADMIN_ROLE')")
+    public Product getProductById(@PathVariable Long id) {
         return productRepository.findById(id).orElseThrow(
                 () -> new RuntimeException("Producto no encontrado con ID: " + id)
         );
     }
     @GetMapping("/filterByName/{name}")
+    @PreAuthorize("hasAnyRole('USER','SUPER_ADMIN_ROLE')")
     public List<Product> getProductbyId(@PathVariable String name) {
         return productRepository.findProductsWithCharacterInName(name);
     }
@@ -36,7 +39,7 @@ public class ProductController {
     }
     @PutMapping("/{id}")
     @PreAuthorize("hasAnyRole('SUPER_ADMIN_ROLE')")
-    public Product updateProduct(@PathVariable String id, @RequestBody Product product) {
+    public Product updateProduct(@PathVariable Long id, @RequestBody Product product) {
         return productRepository.findById(id)
                 .map(existingProduct -> {
                     existingProduct.setName(product.getName());
@@ -53,7 +56,7 @@ public class ProductController {
     }
     @DeleteMapping("/{id}")
     @PreAuthorize("hasAnyRole('SUPER_ADMIN_ROLE')")
-    public void deleteProduct(@PathVariable String id) {
+    public void deleteProduct(@PathVariable Long id) {
         productRepository.deleteById(id);
     }
 

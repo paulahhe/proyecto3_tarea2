@@ -17,11 +17,13 @@ public class CategoryController {
     private CategoryRepository categoryRepository;
 
     @GetMapping
+    @PreAuthorize("hasAnyRole('USER','SUPER_ADMIN_ROLE')")
     public List<Category> getAllCategories() {
         return categoryRepository.findAll();
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('USER','SUPER_ADMIN_ROLE')")
     public Category getCategoryById(@PathVariable Long id) {
         return categoryRepository.findById(id).orElseThrow(
                 ()-> new RuntimeException("No se encontró la categoría con Id" + id)

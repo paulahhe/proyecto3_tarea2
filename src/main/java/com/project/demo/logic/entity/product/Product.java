@@ -17,7 +17,7 @@ import java.util.List;
 @Entity
 public class Product {
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY) private String id;
+    @GeneratedValue (strategy = GenerationType.IDENTITY) private Long id;
     private String name;
     private String description;
     private Long price;
@@ -27,11 +27,11 @@ public class Product {
     @JoinColumn(name = "idCategoria", referencedColumnName = "id", nullable = false)
     private Category category;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
