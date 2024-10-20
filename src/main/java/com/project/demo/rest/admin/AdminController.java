@@ -28,10 +28,10 @@ public class AdminController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    /*@PostMapping
-    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    @PostMapping
+    @PreAuthorize("hasRole('SUPER_ADMIN_ROLE')")
     public User createAdministrator(@RequestBody User newAdminUser) {
-        Optional<Role> optionalRole = roleRepository.findByName(RoleEnum.ADMIN);
+        Optional<Role> optionalRole = roleRepository.findByName(RoleEnum.SUPER_ADMIN_ROLE);
 
         if (optionalRole.isEmpty()) {
             return null;
@@ -44,5 +44,5 @@ public class AdminController {
         user.setRole(optionalRole.get());
 
         return userRepository.save(user);
-    }*/
+    }
 }

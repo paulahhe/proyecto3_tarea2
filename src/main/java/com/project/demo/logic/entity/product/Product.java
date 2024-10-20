@@ -1,4 +1,5 @@
 package com.project.demo.logic.entity.product;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project.demo.logic.entity.user.User;
 import com.project.demo.logic.entity.rol.Role;
 import com.project.demo.logic.entity.category.Category;
@@ -23,6 +24,7 @@ public class Product {
     private Long price;
     @Column(nullable = false) private Integer inStock;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "idCategoria", referencedColumnName = "id", nullable = false)
     private Category category;
