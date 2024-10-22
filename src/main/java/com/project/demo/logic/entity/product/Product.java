@@ -24,7 +24,7 @@ public class Product {
     private Long price;
     @Column(nullable = false) private Integer inStock;
 
-    @JsonIgnore
+    //@JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "idCategoria", referencedColumnName = "id", nullable = false)
     private Category category;

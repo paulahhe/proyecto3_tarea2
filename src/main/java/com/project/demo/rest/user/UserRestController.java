@@ -17,10 +17,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
-@RestController //Decorador
+@RestController
 @RequestMapping("/users")
 public class UserRestController {
     @Autowired
@@ -29,8 +28,8 @@ public class UserRestController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @GetMapping //  integratedNew
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN_ROLE')")
+    @GetMapping
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
     public ResponseEntity<?> getAll(
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -44,24 +43,12 @@ public class UserRestController {
         meta.setPageNumber(ordersPage.getNumber() + 1);
         meta.setPageSize(ordersPage.getSize());
 
-        return new GlobalResponseHandler().handleResponse("User order retrieved successfully",
+        return new GlobalResponseHandler().handleResponse("Order retrieved successfully",
                 ordersPage.getContent(), HttpStatus.OK, meta);
     }
 
-    @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN_ROLE')")
-    public User getUserById(@PathVariable Long id) {
-        return userRepository.findById(id).orElseThrow(RuntimeException::new);
-    }
-
-    @GetMapping("/filterByName/{name}")
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN_ROLE')")
-    public List<User> getUserById(@PathVariable String name) {
-        return userRepository.findUsersWithCharacterInName(name);
-    }
-
     @PostMapping
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN_ROLE')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
     public ResponseEntity<?> addUser(@RequestBody User user, HttpServletRequest request) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
@@ -69,8 +56,8 @@ public class UserRestController {
                 user, HttpStatus.OK, request);
     }
 
-    @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN_ROLE')")
+    @PutMapping("/{userId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
     public ResponseEntity<?> updateUser(@PathVariable Long userId, @RequestBody User user, HttpServletRequest request) {
         Optional<User> foundOrder = userRepository.findById(userId);
         if(foundOrder.isPresent()) {
@@ -84,8 +71,9 @@ public class UserRestController {
         }
     }
 
-    @DeleteMapping("/{id}")
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN_ROLE')")
+
+    @DeleteMapping("/{userId}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'SUPER_ADMIN')")
     public ResponseEntity<?> deleteUser(@PathVariable Long userId, HttpServletRequest request) {
         Optional<User> foundOrder = userRepository.findById(userId);
         if(foundOrder.isPresent()) {

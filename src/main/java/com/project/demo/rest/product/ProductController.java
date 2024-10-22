@@ -98,6 +98,23 @@ public class ProductController {
     public Product addProduct(@RequestBody Product product) {
         return productRepository.save(product);
     }
+    /*@PostMapping
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN_ROLE')")
+    public ResponseEntity<?> addProduct(@RequestBody Product product, HttpServletRequest request) {
+        if (product.getCategory() == null || product.getCategory().getId() == null) {
+            return new GlobalResponseHandler().handleResponse("Category ID must be provided", HttpStatus.BAD_REQUEST, request);
+        }
+
+        Optional<Category> foundCategory = categoryRepository.findById(product.getCategory().getId());
+        if (foundCategory.isPresent()) {
+            product.setCategory(foundCategory.get());
+            Product savedProduct = productRepository.save(product);
+            return new GlobalResponseHandler().handleResponse("Product created successfully", savedProduct, HttpStatus.CREATED, request);
+        } else {
+            return new GlobalResponseHandler().handleResponse("Category with ID " + product.getCategory().getId() + " not found", HttpStatus.NOT_FOUND, request);
+        }
+    }*/
+
     @PostMapping("/category/{id}")
     public ResponseEntity<?> addProductToCategory(@PathVariable Long categoryId, @RequestBody Product product, HttpServletRequest request) {
         Optional<Category> foundCategory = categoryRepository.findById(categoryId);
@@ -149,8 +166,8 @@ public class ProductController {
     public ResponseEntity<?> deleteProduct(@PathVariable Long id, HttpServletRequest request) {
         Optional<Product> existingProduct = productRepository.findById(id);
         if(existingProduct.isPresent()) {
-            Optional<Category> category = categoryRepository.findById(existingProduct.get().getCategory().getId());
-            category.get().getProducts().remove(existingProduct.get());
+//            Optional<Category> category = categoryRepository.findById(existingProduct.get().getCategory().getId());
+//            category.get().getProducts().remove(existingProduct.get());
             productRepository.deleteById(existingProduct.get().getId());
             return new GlobalResponseHandler().handleResponse("Product deleted succesfully", existingProduct.get(), HttpStatus.OK, request);
         } else {
