@@ -130,15 +130,14 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    //@PreAuthorize("hasAnyRole('SUPER_ADMIN_ROLE')")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN_ROLE')") //Estaba desactivada antes y si funcionaba
     public ResponseEntity<?> updateProduct(@PathVariable Long id, @RequestBody Product product, HttpServletRequest request) {
 
-        Optional<Product> existingProduct = productRepository.findById(id);
+        Optional<Product> existingProduct = productRepository.findById(id); //Obj guarda la referencia
 
         if(existingProduct.isPresent()) {
-            product.setId(existingProduct.get().getId());
-            product.setCategory(existingProduct.get().getCategory());
-            productRepository.save(product);
+            existingProduct.get().setCategory(product.getCategory());
+            productRepository.save(existingProduct.get());
             return new GlobalResponseHandler().handleResponse("Product updated succesfully", product, HttpStatus.OK, request);
         } else {
             return new GlobalResponseHandler().handleResponse("Product id" + id + "not found", HttpStatus.NOT_FOUND, request);

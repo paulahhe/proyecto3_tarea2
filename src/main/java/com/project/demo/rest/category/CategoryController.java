@@ -25,11 +25,6 @@ public class CategoryController {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    /*@GetMapping
-    @PreAuthorize("hasAnyRole('USER','SUPER_ADMIN_ROLE')")
-    public List<Category> getAllCategories() {
-        return categoryRepository.findAll();
-    }*/
     @GetMapping
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<?> getAll( // integratedNew
@@ -70,9 +65,10 @@ public class CategoryController {
         Optional<Category> existingCategory = categoryRepository.findById(id);
 
         if(existingCategory.isPresent()) {
-            category.setId(existingCategory.get().getId());
-            categoryRepository.save(category);
-            return new GlobalResponseHandler().handleResponse("Category updated succesfully", id, HttpStatus.OK, request);
+            //category.setId(existingCategory.get().getId());
+            //categoryRepository.save(category);
+            categoryRepository.save(existingCategory.get());
+            return new GlobalResponseHandler().handleResponse("Category updated succesfully", category, HttpStatus.OK, request);
         } else {
             return new GlobalResponseHandler().handleResponse("Category id" + id + "not found", HttpStatus.NOT_FOUND, request);
         }
