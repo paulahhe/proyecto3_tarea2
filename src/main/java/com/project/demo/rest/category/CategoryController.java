@@ -59,14 +59,14 @@ public class CategoryController {
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN_ROLE')")
+    //@PreAuthorize("hasAnyRole('SUPER_ADMIN_ROLE')")
     public ResponseEntity<?> updateCategory(@PathVariable Long id, @RequestBody Category category, HttpServletRequest request) {
 
         Optional<Category> existingCategory = categoryRepository.findById(id);
 
         if(existingCategory.isPresent()) {
-            //category.setId(existingCategory.get().getId());
-            //categoryRepository.save(category);
+            existingCategory.get().setName(category.getName());
+            existingCategory.get().setDescription(category.getDescription());
             categoryRepository.save(existingCategory.get());
             return new GlobalResponseHandler().handleResponse("Category updated succesfully", category, HttpStatus.OK, request);
         } else {

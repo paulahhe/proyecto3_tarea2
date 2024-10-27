@@ -98,45 +98,19 @@ public class ProductController {
     public Product addProduct(@RequestBody Product product) {
         return productRepository.save(product);
     }
-    /*@PostMapping
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN_ROLE')")
-    public ResponseEntity<?> addProduct(@RequestBody Product product, HttpServletRequest request) {
-        if (product.getCategory() == null || product.getCategory().getId() == null) {
-            return new GlobalResponseHandler().handleResponse("Category ID must be provided", HttpStatus.BAD_REQUEST, request);
-        }
-
-        Optional<Category> foundCategory = categoryRepository.findById(product.getCategory().getId());
-        if (foundCategory.isPresent()) {
-            product.setCategory(foundCategory.get());
-            Product savedProduct = productRepository.save(product);
-            return new GlobalResponseHandler().handleResponse("Product created successfully", savedProduct, HttpStatus.CREATED, request);
-        } else {
-            return new GlobalResponseHandler().handleResponse("Category with ID " + product.getCategory().getId() + " not found", HttpStatus.NOT_FOUND, request);
-        }
-    }*/
-
-    @PostMapping("/category/{id}")
-    public ResponseEntity<?> addProductToCategory(@PathVariable Long categoryId, @RequestBody Product product, HttpServletRequest request) {
-        Optional<Category> foundCategory = categoryRepository.findById(categoryId);
-        if(foundCategory.isPresent()) {
-            product.setCategory(foundCategory.get());
-            Product savedProduct = productRepository.save(product);
-            return new GlobalResponseHandler().handleResponse("Product created successfully",
-                    savedProduct, HttpStatus.CREATED, request);
-        } else {
-            return new GlobalResponseHandler().handleResponse("Category id " + categoryId + " not found"  ,
-                    HttpStatus.NOT_FOUND, request);
-        }
-    }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN_ROLE')") //Estaba desactivada antes y si funcionaba
+    //@PreAuthorize("hasAnyRole('SUPER_ADMIN_ROLE')")
     public ResponseEntity<?> updateProduct(@PathVariable Long id, @RequestBody Product product, HttpServletRequest request) {
 
         Optional<Product> existingProduct = productRepository.findById(id); //Obj guarda la referencia
 
         if(existingProduct.isPresent()) {
             existingProduct.get().setCategory(product.getCategory());
+            existingProduct.get().setName(product.getName());
+            existingProduct.get().setDescription(product.getDescription());
+            existingProduct.get().setPrice(product.getPrice());
+            existingProduct.get().setInStock(product.getInStock());
             productRepository.save(existingProduct.get());
             return new GlobalResponseHandler().handleResponse("Product updated succesfully", product, HttpStatus.OK, request);
         } else {
